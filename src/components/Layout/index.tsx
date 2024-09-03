@@ -6,10 +6,10 @@ const Layout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <>
+    <div className="bg-background min-h-[100vh]">
       <Header />
-      <div>{children}</div>
-    </>
+      <div className="pt-10">{children}</div>
+    </div>
   );
 };
 
