@@ -12,6 +12,18 @@ const MuiThemeProvider = ({ children }: React.PropsWithChildren) => {
     typography: {
       fontFamily: ["Roboto", "Noto Sans KR"].join(","),
     },
+    components: {
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            "&&& .MuiInputBase-input": {
+              padding: "8px 12px",
+            },
+            width: "210px",
+          },
+        },
+      },
+    },
   });
 
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
