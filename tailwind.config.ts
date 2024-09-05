@@ -13,6 +13,7 @@ const config: Config = {
         border: "#E0E0E0",
         primary: "#007B3D",
         background: "#F2F2F2",
+        label: "#6C7079",
         "button-background": "##0000001F",
       },
       fontSize: {
