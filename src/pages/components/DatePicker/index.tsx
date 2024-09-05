@@ -1,37 +1,47 @@
+import { WorkPermitFilterValues } from "@/pages";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
-import { useState } from "react";
+import { FormikErrors } from "formik";
 
-const DatePicker = () => {
-  const [period, setPeriod] = useState<{ startDate: Dayjs; endDate: Dayjs }>({
-    startDate: dayjs(new Date()),
-    endDate: dayjs(new Date()),
-  });
+interface DatePickerProps {
+  startDate: string;
+  endDate: string;
+  startDateName: string;
+  endDateName: string;
+  setFieldValue: (
+    field: string,
+    value: any,
+    shouldValidate?: boolean
+  ) => Promise<void> | Promise<FormikErrors<WorkPermitFilterValues>>;
+}
 
+const DatePicker = ({
+  startDate,
+  endDate,
+  startDateName,
+  endDateName,
+  setFieldValue,
+}: DatePickerProps) => {
   return (
     <div>
       <p className="text-label text-md mb-1">날짜</p>
       <div className="flex items-center">
         <DesktopDatePicker
-          defaultValue={dayjs(new Date())}
+          defaultValue={dayjs(startDate)}
           format="YYYY.MM.DD."
-          onChange={(startDate) =>
-            setPeriod((prev) => {
-              return { ...prev, startDate: startDate!! };
-            })
+          onChange={(value) =>
+            setFieldValue(startDateName, value?.format("YYYY-MM-DD"))
           }
-          maxDate={period.endDate}
+          maxDate={dayjs(endDate)}
         />
         ~
         <DesktopDatePicker
-          defaultValue={dayjs(new Date())}
+          defaultValue={dayjs(endDate)}
           format="YYYY.MM.DD."
-          onChange={(endDate) =>
-            setPeriod((prev) => {
-              return { ...prev, endDate: endDate!! };
-            })
+          onChange={(value) =>
+            setFieldValue(endDateName, value?.format("YYYY-MM-DD"))
           }
-          minDate={period.startDate}
+          minDate={dayjs(startDate)}
         />
       </div>
     </div>
