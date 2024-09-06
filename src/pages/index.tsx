@@ -10,78 +10,70 @@ import {
   TextField,
 } from "@mui/material";
 import InputLabel from "@/components/Typography/InputLabel";
-import { DataGrid } from "@mui/x-data-grid";
-import {
-  mockWorkPermitData,
-  tableColumns,
-  workDetailKinds,
-  workKinds,
-} from "@/data/workPermit";
-import CustomFooter from "./components/CustomDataGrid/CustomFooter";
-import CustomColumnMenu from "./components/CustomDataGrid/CustomColumnMenu";
 import { useFormik } from "formik";
 import dayjs from "dayjs";
 import TeamSectionSelector from "./components/TeamSectionSelector";
-import { useEffect } from "react";
+import CustomDataGrid from "./components/CustomDataGrid";
+import { useWorkDetailTypes, useWorkTypes } from "@/lib/hooks/useApi";
 
 export class WorkPermitFilterValues {
-  startDate: string;
-  endDate: string;
-  workKind: number;
-  workDetailKind: number;
-  title: string;
-  page: number;
-  pageSize: number;
-  workExecutionTeam: number;
-  workExecutionSection: number;
-  superVisionTeam: number;
-  superVisionSection: number;
-  workApprovalTeam: number;
-  workApprovalSection: number;
-  woNumber: string;
-  equipment: string;
-  isBeforeWork: boolean;
-  isWorking: boolean;
-  isAfterWork: boolean;
+  actual_start_date: string;
+  actual_end_date: string;
+  work_type: number;
+  work_detail_type: number;
+  work_title: string;
+  work_team: number;
+  work_div: number;
+  inspection_team: number;
+  inspection_div: number;
+  approval_team: number;
+  approval_section: number;
+  work_order_number: string;
+  work_equipment: string;
+  work_before: boolean;
+  work_in_progress: boolean;
+  work_completed: boolean;
+  page_number: number;
+  page_size: number;
 
   constructor(
-    startDate: string,
-    endDate: string,
-    workKind: number,
-    workDetailKind: number,
-    title: string,
-    workExecutionTeam: number,
-    workExecutionSection: number,
-    superVisionTeam: number,
-    superVisionSection: number,
-    workApprovalTeam: number,
-    workApprovalSection: number,
-    woNumber: string,
-    equipment: string,
-    isBeforeWork: boolean,
-    isWorking: boolean,
-    isAfterWork: boolean,
-    page: number,
-    pageSize: number
+    actual_start_date: string,
+    actual_end_date: string,
+    work_type: number,
+    work_detail_type: number,
+    work_title: string,
+    work_team: number,
+    work_div: number,
+    inspection_team: number,
+    inspection_div: number,
+    approval_team: number,
+    approval_section: number,
+    work_order_number: string,
+    work_equipment: string,
+    work_before: boolean,
+    work_in_progress: boolean,
+    work_completed: boolean,
+    page_number: number,
+    page_size: number
   ) {
-    this.startDate = startDate;
-    this.endDate = endDate;
-    this.workKind = workKind;
-    this.workDetailKind = workDetailKind;
-    this.title = title;
-    this.workExecutionTeam = workExecutionTeam;
-    this.workExecutionSection = workExecutionSection;
-    this.superVisionTeam = superVisionTeam;
-    this.superVisionSection = superVisionSection;
-    this.workApprovalTeam = workApprovalTeam;
-    this.workApprovalSection = workApprovalSection;
-    this.woNumber = woNumber;
-    this.equipment = equipment;
-    this.isBeforeWork = isBeforeWork;
-    this.isWorking = isWorking;
-    this.isAfterWork = isAfterWork;
-    this.page = page;
-    this.pageSize = pageSize;
+    this.actual_start_date = actual_start_date;
+    this.actual_end_date = actual_end_date;
+    this.work_type = work_type;
+    this.work_detail_type = work_detail_type;
+    this.work_title = work_title;
+    this.work_team = work_team;
+    this.work_div = work_div;
+    this.inspection_team = inspection_team;
+    this.inspection_div = inspection_div;
+    this.approval_team = approval_team;
+    this.approval_section = approval_section;
+    this.work_order_number = work_order_number;
+    this.work_equipment = work_equipment;
+    this.work_before = work_before;
+    this.work_in_progress = work_in_progress;
+    this.work_completed = work_completed;
+    this.page_number = page_number;
+    this.page_size = page_size;
   }
 }
 
@@ -105,13 +97,12 @@ export default function Home() {
       true,
       true,
       true,
-      0,
+      1,
       10
     ),
   });
-  useEffect(() => {
-    console.log("aaaa");
-  }, [values]);
+  const { data: workTypes } = useWorkTypes(22);
+  const { data: workDetailTypes } = useWorkDetailTypes(22);
 
   return (
     <main className="p-[30px] flex flex-col gap-6">
@@ -122,20 +113,20 @@ export default function Home() {
       >
         <div className="flex gap-x-2 gap-y-4 flex-wrap">
           <DatePicker
-            startDate={values.startDate}
-            endDate={values.endDate}
-            startDateName="startDate"
-            endDateName="endDate"
+            startDate={values.actual_start_date}
+            endDate={values.actual_end_date}
+            startDateName="actual_start_date"
+            endDateName="actual_end_date"
             setFieldValue={setFieldValue}
           />
           <div>
             <InputLabel label="작업 종류" />
             <Select
-              name="workKind"
-              value={values.workKind}
+              name="work_type"
+              value={values.work_type}
               onChange={handleChange}
             >
-              {workKinds.payload.map((work) => (
+              {workTypes?.payload.map((work) => (
                 <MenuItem value={work.id} key={work.id}>
                   {work.content}
                 </MenuItem>
@@ -145,11 +136,11 @@ export default function Home() {
           <div>
             <InputLabel label="작업 상세 분류" />
             <Select
-              name="workDetailKind"
-              value={values.workDetailKind}
+              name="work_detail_type"
+              value={values.work_detail_type}
               onChange={handleChange}
             >
-              {workDetailKinds.payload.map((workDetail) => (
+              {workDetailTypes?.payload.map((workDetail) => (
                 <MenuItem value={workDetail.id} key={workDetail.id}>
                   {workDetail.content}
                 </MenuItem>
@@ -158,53 +149,56 @@ export default function Home() {
           </div>
           <div>
             <InputLabel label="작업명" />
-            <TextField name="title" onChange={handleChange} />
+            <TextField name="work_title" onChange={handleChange} />
           </div>
           <TeamSectionSelector
             teamLabel="작업수행팀"
-            teamName="workExecutionTeam"
-            teamValue={values.workExecutionTeam}
+            teamName="work_team"
+            teamValue={values.work_team}
             sectionLabel="수행 계"
-            sectionName="workExecutionSection"
-            sectionValue={values.workExecutionSection}
+            sectionName="work_div"
+            sectionValue={values.work_div}
             handleChange={handleChange}
+            setFieldValue={setFieldValue}
             allTeam
           />
           <TeamSectionSelector
             teamLabel="공사감독팀"
-            teamName="superVisionTeam"
-            teamValue={values.superVisionTeam}
+            teamName="inspection_team"
+            teamValue={values.inspection_team}
             sectionLabel="감독 계"
-            sectionName="superVisionSection"
-            sectionValue={values.superVisionSection}
+            sectionName="inspection_div"
+            sectionValue={values.inspection_div}
             handleChange={handleChange}
+            setFieldValue={setFieldValue}
           />
           <TeamSectionSelector
             teamLabel="작업승인팀"
-            teamName="workApprovalTeam"
-            teamValue={values.workApprovalTeam}
+            teamName="approval_team"
+            teamValue={values.approval_team}
             sectionLabel="승인 Section"
-            sectionName="workApprovalSection"
-            sectionValue={values.workApprovalSection}
+            sectionName="approval_section"
+            sectionValue={values.approval_section}
             handleChange={handleChange}
+            setFieldValue={setFieldValue}
           />
           <div>
             <InputLabel label="W/O Number" />
-            <TextField name="woNumber" onChange={handleChange} />
+            <TextField name="work_order_number" onChange={handleChange} />
           </div>
 
           <div>
             <InputLabel label="장치명" />
-            <TextField name="equipment" onChange={handleChange} />
+            <TextField name="work_equipment" onChange={handleChange} />
           </div>
         </div>
         <div className="flex gap-4">
           <FormControlLabel
             control={
               <Checkbox
-                name="isBeforeWork"
-                checked={values.isBeforeWork}
-                value={values.isBeforeWork}
+                name="work_before"
+                checked={values.work_before}
+                value={values.work_before}
                 onChange={handleChange}
               />
             }
@@ -213,9 +207,9 @@ export default function Home() {
           <FormControlLabel
             control={
               <Checkbox
-                name="isWorking"
-                checked={values.isWorking}
-                value={values.isWorking}
+                name="work_in_progress"
+                checked={values.work_in_progress}
+                value={values.work_in_progress}
                 onChange={handleChange}
               />
             }
@@ -224,35 +218,16 @@ export default function Home() {
           <FormControlLabel
             control={
               <Checkbox
-                name="isAfterWork"
-                checked={values.isAfterWork}
-                value={values.isAfterWork}
+                name="work_completed"
+                checked={values.work_completed}
+                value={values.work_completed}
                 onChange={handleChange}
               />
             }
             label="작업 완료/취소"
           />
         </div>
-        <div className="h-[600px] flex flex-col rounded-md border-border border relative">
-          <DataGrid
-            rows={mockWorkPermitData.payload.list}
-            columns={tableColumns}
-            getRowId={(row) => row.transId}
-            hideFooterSelectedRowCount={true}
-            disableColumnFilter={true}
-            slots={{
-              columnMenu: CustomColumnMenu,
-              footer: () =>
-                CustomFooter({
-                  pageNumber: values.page,
-                  pageSize: values.pageSize,
-                  setPageNumber: (value) => setFieldValue("page", value),
-                  setPageSize: (value) => setFieldValue("pageSize", value),
-                }),
-            }}
-            pageSizeOptions={[10, 25, 50, 100, 500]}
-          />
-        </div>
+        <CustomDataGrid values={values} setFieldValue={setFieldValue} />
       </form>
     </main>
   );

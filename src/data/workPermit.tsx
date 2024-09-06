@@ -1,97 +1,23 @@
 import { formatPeriod } from "@/lib/utils/time";
-import { Chip } from "@mui/material";
+import { Button, Chip, IconButton } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
-import dayjs from "dayjs";
+import DescriptionIcon from "@mui/icons-material/Description";
+import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 
-interface WorkPermitRow {
-  status: {
-    id: number;
-    content: string;
-  };
-  totalWorkStatus: string;
-  trans: number;
-  transId: number;
-  title: string;
-  soilWorkNo: string;
-  workExecuter: string;
-  workPlanDetailKinds: string;
-  workKind: {
-    id: number;
-    content: string;
-  };
-  workKinds: string;
-  workDetailKind: {
-    id: number;
-    content: string;
-  };
-  workApprovalTeam: {
-    id: number;
-    content: string;
-  };
-  workApprovalSection: {
-    id: number;
-    content: string;
-  };
-  workExecutionTeam: {
-    id: number;
-    content: string;
-  };
-  workExecutionSection: {
-    id: number;
-    content: string;
-  };
-  periodStart: string;
-  periodEnd: string;
-  startDate: string | null;
-  endDate: string | null;
-  planStartDate: string | null;
-  planEndDate: string | null;
-  superVisionTeam: Array<{
-    id: number;
-    content: string;
-  }>;
-  superVisionSection: Array<{
-    id: number;
-    content: string;
-  }>;
-  workOrderOption: string;
-  workerCount: number;
-  unit: {
-    id: number;
-    content: string;
-  };
-  equipment: string;
-  woNumber: string;
-  workTime: number;
-  workRisk: string;
-  workCriticality: string;
-  workDifficulty: string;
-  riskKind: string;
-  scaffoldWork: string;
-  msdsWork: string;
-  isolationWork: string;
-  interlockWork: string;
-  rtsNumber: string;
-  totalHour: number;
-  relatedRiskRegister: string;
-}
-
 export const tableColumns: GridColDef[] = [
-  { field: "transId", headerName: "문서 번호", width: 120 },
+  { field: "trans_id", headerName: "문서 번호", width: 120 },
   {
-    field: "workKind",
+    field: "work_type",
     headerName: "작업 종류",
     width: 120,
-    valueGetter: (_, row) => row.workKind.content || "",
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "workDetailKind",
+    field: "work_detail_type",
     headerName: "작업 상세 분류",
     width: 120,
-    valueGetter: (_, row) => row.workDetailKind.content || "",
     headerAlign: "center",
     align: "center",
   },
@@ -99,20 +25,20 @@ export const tableColumns: GridColDef[] = [
     field: "status",
     headerName: "상태",
     width: 200,
-    valueGetter: (_, row) => row.status.content || "",
     renderCell: ({ value }) => <Chip label={value} />,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "title",
+    field: "work_title",
     headerName: "작업명",
     width: 280,
     renderCell: ({ value, row }) => (
       <Link
-        href={`${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_SYNERGI_NONSSO_PATH}/case/${row.transId}`}
+        href={`${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_SYNERGI_NONSSO_PATH}/case/${row.trans_id}`}
         target="_blank"
-        className="text-primary font-bold"
+        className="font-bold"
+        style={{ color: "#007b3d" }}
       >
         {value}
       </Link>
@@ -121,209 +47,224 @@ export const tableColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "workExecuter",
+    field: "work_exec",
     headerName: "작업 수행 주체",
     width: 120,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "workExecutionTeam",
+    field: "work_team",
     headerName: "작업수행팀",
     width: 120,
-    valueGetter: (_, row) => row.workExecutionTeam.content || "",
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "workExecutionSection",
+    field: "work_div",
     headerName: "수행 계",
     width: 120,
-    valueGetter: (_, row) => row.workExecutionSection.content || "",
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "superVisionTeam",
+    field: "inspection_team",
     headerName: "공사감독팀",
     width: 120,
-    valueGetter: (_, row) =>
-      row.superVisionTeam
-        .map((team: { content: string }) => team.content)
-        .join(", ") || "",
+    valueGetter: (_, row) => row.inspection_team.join(", ") || "",
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "superVisionSection",
+    field: "inspection_div",
     headerName: "감독 계",
     width: 120,
-    valueGetter: (_, row) =>
-      row.superVisionSection
-        .map((section: { content: string }) => section.content)
-        .join(", ") || "",
+    valueGetter: (_, row) => row.inspection_div.join(", ") || "",
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "workApprovalTeam",
+    field: "approval_team",
     headerName: "작업승인팀",
     minWidth: 120,
-    valueGetter: (_, row) => row.workApprovalTeam.content || "",
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "workApprovalSection",
+    field: "approval_section",
     headerName: "승인 Section",
     width: 120,
-    valueGetter: (_, row) => row.workApprovalSection.content || "",
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "planPeriod",
+    field: "plan_period",
     headerName: "작업 계획 기간",
     width: 280,
-    valueGetter: (_, row) => formatPeriod(row.planStartDate, row.planEndDate),
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "permitPeriod",
+    field: "permit_period",
     headerName: "작업 허가 기간",
     width: 280,
-    valueGetter: (_, row) => formatPeriod(row.periodStarte, row.periodEnd),
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "realPeriod",
+    field: "actual_period",
     headerName: "실제 작업 기간",
     width: 280,
-    valueGetter: (_, row) => formatPeriod(row.startDate, row.endDate),
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "workDifficulty",
+    field: "work_difficulty",
     headerName: "작업 종류별 작업난이도",
     width: 120,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "workRisk",
+    field: "env_risk",
     headerName: "작업환경 위험도",
     width: 120,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "workCriticality",
+    field: "criticality",
     headerName: "Criticality",
     width: 200,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "riskKind",
+    field: "hazard_type",
     headerName: "유해/위험 종류",
     width: 200,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "scaffoldWork",
+    field: "scaffold_work",
     headerName: "비계 설치/사용/해체 작업",
     width: 120,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "msdsWork",
+    field: "chemical_work",
     headerName: "유해화학물질 취급 작업",
     width: 120,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "isolationWork",
+    field: "isolation_work",
     headerName: "분리격리(Blind 체결/Spool 제거) 후 본 작업",
     width: 120,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "interlockWork",
+    field: "interlock_bypass",
     headerName: "Interlock Bypass 필요 작업",
     width: 120,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "soilWorkNo",
+    field: "permit_doc_number",
     headerName: "작업허가서 문서 번호",
     width: 200,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "workerCount",
+    field: "num_worker",
     headerName: "작업자 수",
     width: 120,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "workTime",
+    field: "work_hours",
     headerName: "작업 시간",
     width: 120,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "totalHour",
+    field: "total_man_hours",
     headerName: "총 공수",
     width: 120,
-    valueGetter: (_, row) => row.totalHour.toFixed(2) || "",
+    valueGetter: (_, row) => row.total_man_hours.toFixed(2) || "",
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "woNumber",
+    field: "work_order_number",
     headerName: "W/O Number",
     width: 120,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "workOrderOption",
+    field: "pm_type",
     headerName: "PM 종류",
     width: 120,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "rtsNumber",
+    field: "rts_number",
     headerName: "RTS Number",
     width: 120,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "equipment",
+    field: "work_equipment",
     headerName: "장치명",
+    width: 120,
+    valueGetter: (_, row) => row.work_equipment.join(", ") || "",
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "work_progress",
+    headerName: "전체작업 진행현황",
     width: 120,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "totalWorkStatus",
-    headerName: "전체작업 진행현황",
-    width: 120,
-    headerAlign: "center",
+    field: "info",
+    headerName: "",
+    width: 200,
     align: "center",
+    headerClassName: "bg-background",
+    renderCell: ({ row }) => (
+      <div
+        className="flex items-center justify-between text-primary"
+        style={{ height: "100%" }}
+      >
+        <Button variant="contained" disabled={row.work_progress !== "미완료"}>
+          전체 작업 완료
+        </Button>
+        <IconButton>
+          <DescriptionIcon style={{ color: "#007b3d" }} />
+        </IconButton>
+        <IconButton
+          href={`${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_SYNERGI_NONSSO_PATH}/case/${row.transId}`}
+          target="_blank"
+        >
+          <SearchIcon style={{ color: "#007b3d" }} />
+        </IconButton>
+      </div>
+    ),
+    hideSortIcons: true,
   },
 ];
 
@@ -4192,6 +4133,9 @@ export const sections = {
       id: 339,
       content: "제품운영3",
     },
+    { id: 314, content: "#1 ALK" },
+    { id: 315, content: "#3 HMP" },
+    { id: 7943, content: "관리회계팀 예산관리파트" },
   ],
   success: true,
 };
