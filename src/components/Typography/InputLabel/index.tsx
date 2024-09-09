@@ -3,7 +3,7 @@ interface InputLabelProps {
 }
 
 const InputLabel = ({ label }: InputLabelProps) => {
-  return <p className="text-label text-md mb-1">{label}</p>;
+  return <label className="block text-label text-md mb-1">{label}</label>;
 };
 
 export default InputLabel;
