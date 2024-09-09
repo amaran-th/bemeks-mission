@@ -16,4 +16,4 @@ const nextConfig = {
   i18n,
 };
 
-export default nextConfig;
+module.exports = nextConfig;

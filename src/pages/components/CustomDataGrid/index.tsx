@@ -5,6 +5,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import CustomColumnMenu from "./CustomColumnMenu";
 import CustomFooter from "./CustomFooter";
 import { FormikErrors } from "formik";
+import { useRecoilValue } from "recoil";
+import { currentLanguageState } from "@/store/common";
 
 interface CustomDataGridProps {
   values: WorkPermitFilterValues;
@@ -16,7 +18,8 @@ interface CustomDataGridProps {
 }
 
 const CustomDataGrid = ({ values, setFieldValue }: CustomDataGridProps) => {
-  const { data: workPermitData } = useWorkPermits(22, values);
+  const language = useRecoilValue(currentLanguageState);
+  const { data: workPermitData } = useWorkPermits(language, values);
   return (
     <div className="h-[600px] rounded-md border-border border relative">
       <DataGrid

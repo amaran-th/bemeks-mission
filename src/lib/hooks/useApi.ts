@@ -82,12 +82,12 @@ export const useTeams = (language: number, options?: { enabled: boolean }) =>
 
 export const useTeamSections = (
   language: number,
-  teamId: number,
+  teamName: string,
   options?: { enabled: boolean }
 ) =>
   useQuery({
     ...options,
-    queryKey: QueryKeys.TEAM_SECIONS(language, teamId),
+    queryKey: QueryKeys.TEAM_SECIONS(language, teamName),
     queryFn: async (): Promise<InformationData> => {
       // const response = await client.get(`/Filter/sections`, {
       //   params: { language, teamId },

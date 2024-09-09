@@ -5,10 +5,10 @@ export const QueryKeys = {
   WORK_DETAIL_TYPES: (language: number) => ["workDetailKinds", language], // Filter/work-detail-kinds
   ALL_TEAMS: (language: number) => ["executionTeams", language], // Filter/teams/all
   TEAMS: (language: number) => ["superVisionTeams", language], // Filter/teams
-  TEAM_SECIONS: (language: number, teamId: number) => [
+  TEAM_SECIONS: (language: number, teamName: string) => [
     "superVisionSections",
     language,
-    teamId,
+    teamName,
   ], // Filter/sections?teamId
   WORK_PERMITS: (language: number, values: WorkPermitFilterValues) => [
     "superVisionTeams",
