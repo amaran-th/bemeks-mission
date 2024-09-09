@@ -15,19 +15,23 @@ import dayjs from "dayjs";
 import TeamSectionSelector from "./components/TeamSectionSelector";
 import CustomDataGrid from "./components/CustomDataGrid";
 import { useWorkDetailTypes, useWorkTypes } from "@/lib/hooks/useApi";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+import { useRecoilValue } from "recoil";
+import { currentLanguageState } from "@/store/common";
 
 export class WorkPermitFilterValues {
   actual_start_date: string;
   actual_end_date: string;
-  work_type: number;
-  work_detail_type: number;
+  work_type: string;
+  work_detail_type: string;
   work_title: string;
-  work_team: number;
-  work_div: number;
-  inspection_team: number;
-  inspection_div: number;
-  approval_team: number;
-  approval_section: number;
+  work_team: string;
+  work_div: string;
+  inspection_team: string;
+  inspection_div: string;
+  approval_team: string;
+  approval_section: string;
   work_order_number: string;
   work_equipment: string;
   work_before: boolean;
@@ -39,15 +43,15 @@ export class WorkPermitFilterValues {
   constructor(
     actual_start_date: string,
     actual_end_date: string,
-    work_type: number,
-    work_detail_type: number,
+    work_type: string,
+    work_detail_type: string,
     work_title: string,
-    work_team: number,
-    work_div: number,
-    inspection_team: number,
-    inspection_div: number,
-    approval_team: number,
-    approval_section: number,
+    work_team: string,
+    work_div: string,
+    inspection_team: string,
+    inspection_div: string,
+    approval_team: string,
+    approval_section: string,
     work_order_number: string,
     work_equipment: string,
     work_before: boolean,
@@ -77,21 +81,28 @@ export class WorkPermitFilterValues {
   }
 }
 
+export const getStaticProps = async ({ locale }: { locale: "ko" | "en" }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["common", "work-permit"])),
+  },
+});
+
 export default function Home() {
+  const language = useRecoilValue(currentLanguageState);
   const { values, handleChange, setFieldValue } = useFormik({
     onSubmit: () => {},
     initialValues: new WorkPermitFilterValues(
       dayjs(new Date()).format("YYYY-MM-DD"),
       dayjs(new Date()).format("YYYY-MM-DD"),
-      0,
-      0,
-      "",
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
+      "전체",
+      "전체",
+      "전체",
+      "전체",
+      "전체",
+      "전체",
+      "전체",
+      "전체",
+      "전체",
       "",
       "",
       true,
@@ -101,12 +112,14 @@ export default function Home() {
       10
     ),
   });
-  const { data: workTypes } = useWorkTypes(22);
-  const { data: workDetailTypes } = useWorkDetailTypes(22);
+  const { data: workTypes } = useWorkTypes(language);
+  const { data: workDetailTypes } = useWorkDetailTypes(language);
+
+  const { t } = useTranslation();
 
   return (
     <main className="p-[30px] flex flex-col gap-6">
-      <PageTitle title={"허가서 조회"} />
+      <PageTitle title={`${t("work-permit:허가서_조회")}${t("영어")}`} />
       <form
         className="flex flex-col gap-4 border bg-white border-border rounded-md p-6"
         onSubmit={handleChange}
@@ -127,7 +140,7 @@ export default function Home() {
               onChange={handleChange}
             >
               {workTypes?.payload.map((work) => (
-                <MenuItem value={work.id} key={work.id}>
+                <MenuItem value={work.content} key={work.id}>
                   {work.content}
                 </MenuItem>
               ))}
@@ -141,7 +154,7 @@ export default function Home() {
               onChange={handleChange}
             >
               {workDetailTypes?.payload.map((workDetail) => (
-                <MenuItem value={workDetail.id} key={workDetail.id}>
+                <MenuItem value={workDetail.content} key={workDetail.id}>
                   {workDetail.content}
                 </MenuItem>
               ))}
