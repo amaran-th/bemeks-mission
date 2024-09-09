@@ -1,6 +1,6 @@
 import { WorkPermitFilterValues } from "@/pages";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { FormikErrors } from "formik";
 
 interface DatePickerProps {
