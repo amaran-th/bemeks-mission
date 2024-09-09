@@ -115,7 +115,7 @@ export const useWorkPermits = (
   useQuery({
     ...options,
     queryKey: QueryKeys.WORK_PERMITS(language, values),
-    queryFn: async (): Promise<WorkPermitRow[]> => {
+    queryFn: async (): Promise<WorkPermitRowData> => {
       const response = await client.get(`/WorkPermit`, {
         params: {
           ...removeEmptyField({

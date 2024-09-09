@@ -97,7 +97,7 @@ export default function Home() {
       true,
       true,
       true,
-      1,
+      0,
       10
     ),
   });
@@ -227,7 +227,11 @@ export default function Home() {
             label="작업 완료/취소"
           />
         </div>
-        <CustomDataGrid values={values} setFieldValue={setFieldValue} />
+        <CustomDataGrid
+          key={JSON.stringify(values)}
+          values={values}
+          setFieldValue={setFieldValue}
+        />
       </form>
     </main>
   );

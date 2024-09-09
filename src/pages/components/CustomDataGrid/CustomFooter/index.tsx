@@ -26,7 +26,7 @@ const CustomFooter = ({
     <Box flex="auto" />
     <GridPagination
       rowsPerPage={pageSize}
-      page={pageNumber - 1}
+      page={pageNumber}
       count={totalCount}
       onRowsPerPageChange={(e) => setPageSize(parseInt(e.target.value))}
       onPageChange={(_, page) => setPageNumber(page)}

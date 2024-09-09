@@ -45,6 +45,6 @@ export interface WorkPermitRow {
 }
 
 export interface WorkPermitRowData {
-  payload: { totalCount: number; list: WorkPermitRow[] };
-  success: boolean;
+  total_count: number;
+  permits: WorkPermitRow[];
 }

@@ -20,7 +20,7 @@ const CustomDataGrid = ({ values, setFieldValue }: CustomDataGridProps) => {
   return (
     <div className="h-[600px] rounded-md border-border border relative">
       <DataGrid
-        rows={workPermitData ?? []}
+        rows={workPermitData?.permits ?? []}
         columns={tableColumns}
         getRowId={(row) => row.trans_id}
         hideFooterSelectedRowCount={true}
@@ -32,7 +32,7 @@ const CustomDataGrid = ({ values, setFieldValue }: CustomDataGridProps) => {
           columnMenu: CustomColumnMenu,
           footer: () =>
             CustomFooter({
-              totalCount: 0,
+              totalCount: workPermitData?.total_count ?? 0,
               pageNumber: values.page_number,
               pageSize: values.page_size,
               setPageNumber: (value) => setFieldValue("page_number", value),
