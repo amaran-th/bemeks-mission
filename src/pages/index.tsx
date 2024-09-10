@@ -154,7 +154,6 @@ export default function Home() {
             <div>
               <InputLabel label={t("work-permit:작업_종류")} />
               <Autocomplete
-                size="small"
                 options={workTypes?.payload ?? []}
                 inputValue={workTypeInputValue}
                 value={values.work_type}
@@ -166,13 +165,12 @@ export default function Home() {
                 }}
                 getOptionLabel={(option: Information) => option.content}
                 className="w-full lg:w-[210px]"
-                renderInput={(params) => <TextField {...params} size="small" />}
+                renderInput={(params) => <TextField {...params} />}
               />
             </div>
             <div>
               <InputLabel label={t("work-permit:작업_상세_분류")} />
               <Autocomplete
-                size="small"
                 options={workDetailTypes?.payload ?? []}
                 inputValue={workDetailTypeInputValue}
                 value={values.work_detail_type}
@@ -184,7 +182,7 @@ export default function Home() {
                 }}
                 getOptionLabel={(option: Information) => option.content}
                 className="w-full lg:w-[210px]"
-                renderInput={(params) => <TextField {...params} size="small" />}
+                renderInput={(params) => <TextField {...params} />}
               />
             </div>
             <div>

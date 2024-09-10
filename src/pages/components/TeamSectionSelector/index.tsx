@@ -59,7 +59,6 @@ const TeamSectionSelector = ({
       <div>
         <InputLabel label={teamLabel} />
         <Autocomplete
-          size="small"
           options={loadedTeam}
           inputValue={teamInputValue}
           value={teamValue}
@@ -70,13 +69,12 @@ const TeamSectionSelector = ({
           }}
           getOptionLabel={(option: Information) => option.content}
           className="w-full lg:w-[210px]"
-          renderInput={(params) => <TextField {...params} size="small" />}
+          renderInput={(params) => <TextField {...params} />}
         />
       </div>
       <div>
         <InputLabel label={sectionLabel} />
         <Autocomplete
-          size="small"
           options={sections?.payload ?? []}
           inputValue={sectionInputValue}
           value={sectionValue}
@@ -87,7 +85,7 @@ const TeamSectionSelector = ({
           }}
           getOptionLabel={(option: Information) => option.content}
           className="w-full lg:w-[210px]"
-          renderInput={(params) => <TextField {...params} size="small" />}
+          renderInput={(params) => <TextField {...params} />}
         />
       </div>
     </>
