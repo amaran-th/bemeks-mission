@@ -19,7 +19,6 @@ const MuiThemeProvider = ({ children }: React.PropsWithChildren) => {
             "&&& .MuiInputBase-input": {
               padding: "8px 12px",
             },
-            width: "210px",
           },
         },
       },

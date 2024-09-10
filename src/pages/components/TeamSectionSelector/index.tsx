@@ -60,7 +60,12 @@ const TeamSectionSelector = ({
     <>
       <div>
         <InputLabel label={teamLabel} />
-        <Select name={teamName} value={teamValue} onChange={handleChange}>
+        <Select
+          name={teamName}
+          value={teamValue}
+          onChange={handleChange}
+          className="w-full lg:w-[210px]"
+        >
           {Array.isArray(loadedTeam) && // api 연결 후에 지워보기
             loadedTeam.map((team) => (
               <MenuItem value={team.id} key={team.id}>
@@ -71,7 +76,12 @@ const TeamSectionSelector = ({
       </div>
       <div>
         <InputLabel label={sectionLabel} />
-        <Select name={sectionName} value={sectionValue} onChange={handleChange}>
+        <Select
+          name={sectionName}
+          value={sectionValue}
+          onChange={handleChange}
+          className="w-full lg:w-[210px]"
+        >
           {sections?.payload.map((section) => (
             <MenuItem value={section.id} key={section.id}>
               {section.content}

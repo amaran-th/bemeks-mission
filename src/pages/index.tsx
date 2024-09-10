@@ -3,6 +3,7 @@
 import PageTitle from "@/components/Typography/PageTitle";
 import DatePicker from "./components/DatePicker";
 import {
+  Button,
   Checkbox,
   FormControlLabel,
   MenuItem,
@@ -19,6 +20,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { useRecoilValue } from "recoil";
 import { currentLanguageState } from "@/store/common";
+import { useState } from "react";
 
 export class WorkPermitFilterValues {
   actual_start_date: string;
@@ -90,6 +92,7 @@ export const getStaticProps = async ({ locale }: { locale: "ko" | "en" }) => ({
 export default function Home() {
   const language = useRecoilValue(currentLanguageState);
   const { t } = useTranslation();
+  const [openFilter, setOpenFilter] = useState<boolean>(false);
   const { values, handleChange, setFieldValue } = useFormik({
     onSubmit: () => {},
     initialValues: new WorkPermitFilterValues(
@@ -123,121 +126,147 @@ export default function Home() {
         className="flex flex-col gap-4 border bg-white border-border rounded-md p-6"
         onSubmit={handleChange}
       >
-        <div className="flex gap-x-2 gap-y-4 flex-wrap">
-          <DatePicker
-            startDate={values.actual_start_date}
-            endDate={values.actual_end_date}
-            startDateName="actual_start_date"
-            endDateName="actual_end_date"
-            setFieldValue={setFieldValue}
-          />
-          <div>
-            <InputLabel label={t("work-permit:작업_종류")} />
-            <Select
-              name="work_type"
-              value={values.work_type}
-              onChange={handleChange}
-            >
-              {workTypes?.payload.map((work) => (
-                <MenuItem value={work.id} key={work.id}>
-                  {work.content}
-                </MenuItem>
-              ))}
-            </Select>
-          </div>
-          <div>
-            <InputLabel label={t("work-permit:작업_상세_분류")} />
-            <Select
-              name="work_detail_type"
-              value={values.work_detail_type}
-              onChange={handleChange}
-            >
-              {workDetailTypes?.payload.map((workDetail) => (
-                <MenuItem value={workDetail.id} key={workDetail.id}>
-                  {workDetail.content}
-                </MenuItem>
-              ))}
-            </Select>
-          </div>
-          <div>
-            <InputLabel label={t("work-permit:작업명")} />
-            <TextField name="work_title" onChange={handleChange} />
-          </div>
-          <TeamSectionSelector
-            teamLabel={t("work-permit:작업수행팀")}
-            teamName="work_team"
-            teamValue={values.work_team}
-            sectionLabel={t("work-permit:수행_계")}
-            sectionName="work_div"
-            sectionValue={values.work_div}
-            handleChange={handleChange}
-            setFieldValue={setFieldValue}
-            allTeam
-          />
-          <TeamSectionSelector
-            teamLabel={t("work-permit:공사감독팀")}
-            teamName="inspection_team"
-            teamValue={values.inspection_team}
-            sectionLabel={t("work-permit:감독_계")}
-            sectionName="inspection_div"
-            sectionValue={values.inspection_div}
-            handleChange={handleChange}
-            setFieldValue={setFieldValue}
-          />
-          <TeamSectionSelector
-            teamLabel={t("work-permit:작업승인팀")}
-            teamName="approval_team"
-            teamValue={values.approval_team}
-            sectionLabel={t("work-permit:승인_Section")}
-            sectionName="approval_section"
-            sectionValue={values.approval_section}
-            handleChange={handleChange}
-            setFieldValue={setFieldValue}
-          />
-          <div>
-            <InputLabel label={t("work-permit:W/O_Number")} />
-            <TextField name="work_order_number" onChange={handleChange} />
-          </div>
+        <Button
+          variant="outlined"
+          className="sm:hidden"
+          onClick={() => setOpenFilter((prev) => !prev)}
+        >
+          {openFilter ? t("필터_닫기") : t("필터_열기")}
+        </Button>
+        <div className={`${!openFilter && "hidden"} sm:flex flex-col gap-4`}>
+          <div className="flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 lg:flex lg:flex-row gap-x-2 gap-y-4 flex-wrap">
+            <div className="col-span-2">
+              <DatePicker
+                startDate={values.actual_start_date}
+                endDate={values.actual_end_date}
+                startDateName="actual_start_date"
+                endDateName="actual_end_date"
+                setFieldValue={setFieldValue}
+              />
+            </div>
+            <div>
+              <InputLabel label={t("work-permit:작업_종류")} />
+              <Select
+                name="work_type"
+                value={values.work_type}
+                onChange={handleChange}
+                className="w-full lg:w-[210px]"
+              >
+                {workTypes?.payload.map((work) => (
+                  <MenuItem value={work.id} key={work.id}>
+                    {work.content}
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
+            <div>
+              <InputLabel label={t("work-permit:작업_상세_분류")} />
+              <Select
+                name="work_detail_type"
+                value={values.work_detail_type}
+                onChange={handleChange}
+                className="w-full lg:w-[210px]"
+              >
+                {workDetailTypes?.payload.map((workDetail) => (
+                  <MenuItem value={workDetail.id} key={workDetail.id}>
+                    {workDetail.content}
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
+            <div>
+              <InputLabel label={t("work-permit:작업명")} />
+              <TextField
+                name="work_title"
+                onChange={handleChange}
+                className="lg:w-[210px]"
+                fullWidth
+              />
+            </div>
+            <TeamSectionSelector
+              teamLabel={t("work-permit:작업수행팀")}
+              teamName="work_team"
+              teamValue={values.work_team}
+              sectionLabel={t("work-permit:수행_계")}
+              sectionName="work_div"
+              sectionValue={values.work_div}
+              handleChange={handleChange}
+              setFieldValue={setFieldValue}
+              allTeam
+            />
+            <TeamSectionSelector
+              teamLabel={t("work-permit:공사감독팀")}
+              teamName="inspection_team"
+              teamValue={values.inspection_team}
+              sectionLabel={t("work-permit:감독_계")}
+              sectionName="inspection_div"
+              sectionValue={values.inspection_div}
+              handleChange={handleChange}
+              setFieldValue={setFieldValue}
+            />
+            <TeamSectionSelector
+              teamLabel={t("work-permit:작업승인팀")}
+              teamName="approval_team"
+              teamValue={values.approval_team}
+              sectionLabel={t("work-permit:승인_Section")}
+              sectionName="approval_section"
+              sectionValue={values.approval_section}
+              handleChange={handleChange}
+              setFieldValue={setFieldValue}
+            />
+            <div>
+              <InputLabel label={t("work-permit:W/O_Number")} />
+              <TextField
+                name="work_order_number"
+                onChange={handleChange}
+                className="w-full lg:w-[210px]"
+              />
+            </div>
 
-          <div>
-            <InputLabel label={t("work-permit:장치명")} />
-            <TextField name="work_equipment" onChange={handleChange} />
+            <div>
+              <InputLabel label={t("work-permit:장치명")} />
+              <TextField
+                name="work_equipment"
+                onChange={handleChange}
+                className="w-full lg:w-[210px]"
+              />
+            </div>
           </div>
-        </div>
-        <div className="flex gap-4">
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="work_before"
-                checked={values.work_before}
-                value={values.work_before}
-                onChange={handleChange}
-              />
-            }
-            label={t("work-permit:작업_전")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="work_in_progress"
-                checked={values.work_in_progress}
-                value={values.work_in_progress}
-                onChange={handleChange}
-              />
-            }
-            label={t("work-permit:작업_진행_중")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="work_completed"
-                checked={values.work_completed}
-                value={values.work_completed}
-                onChange={handleChange}
-              />
-            }
-            label={t("work-permit:작업_완료/취소")}
-          />
+          <div className="flex gap-4">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="work_before"
+                  checked={values.work_before}
+                  value={values.work_before}
+                  onChange={handleChange}
+                />
+              }
+              label={t("work-permit:작업_전")}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="work_in_progress"
+                  checked={values.work_in_progress}
+                  value={values.work_in_progress}
+                  onChange={handleChange}
+                />
+              }
+              label={t("work-permit:작업_진행_중")}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="work_completed"
+                  checked={values.work_completed}
+                  value={values.work_completed}
+                  onChange={handleChange}
+                />
+              }
+              label={t("work-permit:작업_완료/취소")}
+            />
+          </div>
         </div>
         <CustomDataGrid
           key={JSON.stringify(values)}

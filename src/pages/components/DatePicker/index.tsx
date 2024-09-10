@@ -25,7 +25,7 @@ const DatePicker = ({
 }: DatePickerProps) => {
   const { t } = useTranslation();
   return (
-    <div>
+    <>
       <p className="text-label text-md mb-1">{t("work-permit:날짜")}</p>
       <div className="flex items-center">
         <DesktopDatePicker
@@ -35,6 +35,7 @@ const DatePicker = ({
             setFieldValue(startDateName, value?.format("YYYY-MM-DD"))
           }
           maxDate={dayjs(endDate)}
+          className="flex-grow"
         />
         ~
         <DesktopDatePicker
@@ -44,9 +45,10 @@ const DatePicker = ({
             setFieldValue(endDateName, value?.format("YYYY-MM-DD"))
           }
           minDate={dayjs(startDate)}
+          className="flex-grow"
         />
       </div>
-    </div>
+    </>
   );
 };
 

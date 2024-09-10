@@ -1,5 +1,7 @@
 {
   "전체": "All",
   "미완료": "Not Selected",
-  "문서_번호": "Document Number"
+  "문서_번호": "Document Number",
+  "필터_열기": "Open Filter",
+  "필터_닫기": "Close Filter"
 }
