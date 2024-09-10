@@ -98,7 +98,7 @@ export default function Home() {
     useState<string>("");
   const { current: defaultOption } = useRef<Information>({
     id: 0,
-    content: t("전체"),
+    value: t("전체"),
   });
   const { values, handleChange, setFieldValue } = useFormik({
     onSubmit: () => {},
@@ -154,7 +154,7 @@ export default function Home() {
             <div>
               <InputLabel label={t("work-permit:작업_종류")} />
               <Autocomplete
-                options={workTypes?.payload ?? []}
+                options={workTypes ?? []}
                 inputValue={workTypeInputValue}
                 value={values.work_type}
                 onInputChange={(_, value) => setWorkTypeInputValue(value)}
@@ -163,7 +163,7 @@ export default function Home() {
                     setFieldValue("work_type", defaultOption);
                   else setFieldValue("work_type", value);
                 }}
-                getOptionLabel={(option: Information) => option.content}
+                getOptionLabel={(option: Information) => option.value}
                 className="w-full lg:w-[210px]"
                 renderInput={(params) => <TextField {...params} />}
               />
@@ -171,7 +171,7 @@ export default function Home() {
             <div>
               <InputLabel label={t("work-permit:작업_상세_분류")} />
               <Autocomplete
-                options={workDetailTypes?.payload ?? []}
+                options={workDetailTypes ?? []}
                 inputValue={workDetailTypeInputValue}
                 value={values.work_detail_type}
                 onInputChange={(_, value) => setWorkDetailTypeInputValue(value)}
@@ -180,7 +180,7 @@ export default function Home() {
                     setFieldValue("work_detail_type", defaultOption);
                   else setFieldValue("work_detail_type", value);
                 }}
-                getOptionLabel={(option: Information) => option.content}
+                getOptionLabel={(option: Information) => option.value}
                 className="w-full lg:w-[210px]"
                 renderInput={(params) => <TextField {...params} />}
               />

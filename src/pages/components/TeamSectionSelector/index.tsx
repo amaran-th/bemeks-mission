@@ -40,14 +40,14 @@ const TeamSectionSelector = ({
   const { data: teams } = useTeams(language, { enabled: !allTeam });
   const { data: sections, refetch } = useTeamSections(language, teamValue.id);
   const loadedTeam: Information[] = useMemo(
-    () => (allTeam ? allTeams : teams)?.payload ?? [],
+    () => (allTeam ? allTeams : teams) ?? [],
     [allTeam, allTeams, teams]
   );
   const [teamInputValue, setTeamInputValue] = useState<string>("");
   const [sectionInputValue, setSectionInputValue] = useState<string>("");
   const { current: defaultOption } = useRef<Information>({
     id: 0,
-    content: t("전체"),
+    value: t("전체"),
   });
   useEffect(() => {
     setFieldValue(sectionName, defaultOption);
@@ -67,7 +67,7 @@ const TeamSectionSelector = ({
             if (reason === "clear") setFieldValue(teamName, defaultOption);
             else setFieldValue(teamName, value);
           }}
-          getOptionLabel={(option: Information) => option.content}
+          getOptionLabel={(option: Information) => option.value}
           className="w-full lg:w-[210px]"
           renderInput={(params) => <TextField {...params} />}
         />
@@ -75,7 +75,7 @@ const TeamSectionSelector = ({
       <div>
         <InputLabel label={sectionLabel} />
         <Autocomplete
-          options={sections?.payload ?? []}
+          options={sections ?? []}
           inputValue={sectionInputValue}
           value={sectionValue}
           onInputChange={(_, value) => setSectionInputValue(value)}
@@ -83,7 +83,7 @@ const TeamSectionSelector = ({
             if (reason === "clear") setFieldValue(sectionName, defaultOption);
             else setFieldValue(sectionName, value);
           }}
-          getOptionLabel={(option: Information) => option.content}
+          getOptionLabel={(option: Information) => option.value}
           className="w-full lg:w-[210px]"
           renderInput={(params) => <TextField {...params} />}
         />

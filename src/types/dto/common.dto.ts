@@ -1,11 +1,6 @@
 export interface Information {
   id: number;
-  content: string;
-}
-
-export interface InformationData {
-  payload: Information[];
-  success: boolean;
+  value: string;
 }
 
 export interface WorkPermitRow {
