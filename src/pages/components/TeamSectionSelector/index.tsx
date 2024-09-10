@@ -7,16 +7,17 @@ import { Information, InformationData } from "@/types/dto/common.dto";
 import { MenuItem, Select } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import { FormikErrors } from "formik";
+import { useTranslation } from "next-i18next";
 import { ChangeEvent, useEffect, useMemo } from "react";
 import { useRecoilValue } from "recoil";
 
 interface TeamSectionSelectorProps {
   teamLabel: string;
   teamName: string;
-  teamValue: string;
+  teamValue: number;
   sectionLabel: string;
   sectionName: string;
-  sectionValue: string;
+  sectionValue: number;
   handleChange: {
     (e: ChangeEvent<any>): void;
     <T_1 = string | ChangeEvent<any>>(field: T_1): T_1 extends ChangeEvent<any>
@@ -51,7 +52,7 @@ const TeamSectionSelector = ({
     [allTeam, allTeams, teams]
   );
   useEffect(() => {
-    setFieldValue(sectionName, "전체");
+    setFieldValue(sectionName, 0);
     refetch();
   }, [teamValue, sectionName, setFieldValue, refetch]);
 
@@ -62,7 +63,7 @@ const TeamSectionSelector = ({
         <Select name={teamName} value={teamValue} onChange={handleChange}>
           {Array.isArray(loadedTeam) && // api 연결 후에 지워보기
             loadedTeam.map((team) => (
-              <MenuItem value={team.content} key={team.id}>
+              <MenuItem value={team.id} key={team.id}>
                 {team.content}
               </MenuItem>
             ))}
@@ -72,7 +73,7 @@ const TeamSectionSelector = ({
         <InputLabel label={sectionLabel} />
         <Select name={sectionName} value={sectionValue} onChange={handleChange}>
           {sections?.payload.map((section) => (
-            <MenuItem value={section.content} key={section.id}>
+            <MenuItem value={section.id} key={section.id}>
               {section.content}
             </MenuItem>
           ))}

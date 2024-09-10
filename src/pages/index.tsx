@@ -23,15 +23,15 @@ import { currentLanguageState } from "@/store/common";
 export class WorkPermitFilterValues {
   actual_start_date: string;
   actual_end_date: string;
-  work_type: string;
-  work_detail_type: string;
+  work_type: number;
+  work_detail_type: number;
   work_title: string;
-  work_team: string;
-  work_div: string;
-  inspection_team: string;
-  inspection_div: string;
-  approval_team: string;
-  approval_section: string;
+  work_team: number;
+  work_div: number;
+  inspection_team: number;
+  inspection_div: number;
+  approval_team: number;
+  approval_section: number;
   work_order_number: string;
   work_equipment: string;
   work_before: boolean;
@@ -43,15 +43,15 @@ export class WorkPermitFilterValues {
   constructor(
     actual_start_date: string,
     actual_end_date: string,
-    work_type: string,
-    work_detail_type: string,
+    work_type: number,
+    work_detail_type: number,
     work_title: string,
-    work_team: string,
-    work_div: string,
-    inspection_team: string,
-    inspection_div: string,
-    approval_team: string,
-    approval_section: string,
+    work_team: number,
+    work_div: number,
+    inspection_team: number,
+    inspection_div: number,
+    approval_team: number,
+    approval_section: number,
     work_order_number: string,
     work_equipment: string,
     work_before: boolean,
@@ -95,15 +95,15 @@ export default function Home() {
     initialValues: new WorkPermitFilterValues(
       dayjs(new Date()).format("YYYY-MM-DD"),
       dayjs(new Date()).format("YYYY-MM-DD"),
-      t("전체"),
-      t("전체"),
-      t("전체"),
-      t("전체"),
-      t("전체"),
-      t("전체"),
-      t("전체"),
-      t("전체"),
-      t("전체"),
+      0,
+      0,
+      "",
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
       "",
       "",
       true,
@@ -139,7 +139,7 @@ export default function Home() {
               onChange={handleChange}
             >
               {workTypes?.payload.map((work) => (
-                <MenuItem value={work.content} key={work.id}>
+                <MenuItem value={work.id} key={work.id}>
                   {work.content}
                 </MenuItem>
               ))}
@@ -153,7 +153,7 @@ export default function Home() {
               onChange={handleChange}
             >
               {workDetailTypes?.payload.map((workDetail) => (
-                <MenuItem value={workDetail.content} key={workDetail.id}>
+                <MenuItem value={workDetail.id} key={workDetail.id}>
                   {workDetail.content}
                 </MenuItem>
               ))}

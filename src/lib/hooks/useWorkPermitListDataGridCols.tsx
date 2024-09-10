@@ -8,7 +8,7 @@ import Link from "next/link";
 const useWorkPermitListDataGridCols = () => {
   const { t } = useTranslation();
   const cols: GridColDef[] = [
-    { field: "trans_id", headerName: "문서 번호", width: 120 },
+    { field: "trans_id", headerName: t("문서 번호"), width: 120 },
     {
       field: "work_type",
       headerName: t("work-permit:작업_종류"),
