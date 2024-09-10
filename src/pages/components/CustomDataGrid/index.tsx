@@ -1,4 +1,3 @@
-import { tableColumns } from "@/data/workPermit";
 import { useWorkPermits } from "@/lib/hooks/useApi";
 import { WorkPermitFilterValues } from "@/pages";
 import { DataGrid } from "@mui/x-data-grid";
@@ -7,6 +6,7 @@ import CustomFooter from "./CustomFooter";
 import { FormikErrors } from "formik";
 import { useRecoilValue } from "recoil";
 import { currentLanguageState } from "@/store/common";
+import useWorkPermitListDataGridCols from "@/lib/hooks/useWorkPermitListDataGridCols";
 
 interface CustomDataGridProps {
   values: WorkPermitFilterValues;
@@ -20,11 +20,12 @@ interface CustomDataGridProps {
 const CustomDataGrid = ({ values, setFieldValue }: CustomDataGridProps) => {
   const language = useRecoilValue(currentLanguageState);
   const { data: workPermitData } = useWorkPermits(language, values);
+  const { cols } = useWorkPermitListDataGridCols();
   return (
     <div className="h-[600px] rounded-md border-border border relative">
       <DataGrid
         rows={workPermitData?.permits ?? []}
-        columns={tableColumns}
+        columns={cols}
         getRowId={(row) => row.trans_id}
         hideFooterSelectedRowCount={true}
         disableColumnFilter={true}

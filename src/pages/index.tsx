@@ -89,20 +89,21 @@ export const getStaticProps = async ({ locale }: { locale: "ko" | "en" }) => ({
 
 export default function Home() {
   const language = useRecoilValue(currentLanguageState);
+  const { t } = useTranslation();
   const { values, handleChange, setFieldValue } = useFormik({
     onSubmit: () => {},
     initialValues: new WorkPermitFilterValues(
       dayjs(new Date()).format("YYYY-MM-DD"),
       dayjs(new Date()).format("YYYY-MM-DD"),
-      "전체",
-      "전체",
-      "전체",
-      "전체",
-      "전체",
-      "전체",
-      "전체",
-      "전체",
-      "전체",
+      t("전체"),
+      t("전체"),
+      t("전체"),
+      t("전체"),
+      t("전체"),
+      t("전체"),
+      t("전체"),
+      t("전체"),
+      t("전체"),
       "",
       "",
       true,
@@ -115,11 +116,9 @@ export default function Home() {
   const { data: workTypes } = useWorkTypes(language);
   const { data: workDetailTypes } = useWorkDetailTypes(language);
 
-  const { t } = useTranslation();
-
   return (
     <main className="p-[30px] flex flex-col gap-6">
-      <PageTitle title={`${t("work-permit:허가서_조회")}${t("영어")}`} />
+      <PageTitle title={t("work-permit:허가서_조회")} />
       <form
         className="flex flex-col gap-4 border bg-white border-border rounded-md p-6"
         onSubmit={handleChange}
@@ -133,7 +132,7 @@ export default function Home() {
             setFieldValue={setFieldValue}
           />
           <div>
-            <InputLabel label="작업 종류" />
+            <InputLabel label={t("work-permit:작업_종류")} />
             <Select
               name="work_type"
               value={values.work_type}
@@ -147,7 +146,7 @@ export default function Home() {
             </Select>
           </div>
           <div>
-            <InputLabel label="작업 상세 분류" />
+            <InputLabel label={t("work-permit:작업_상세_분류")} />
             <Select
               name="work_detail_type"
               value={values.work_detail_type}
@@ -161,14 +160,14 @@ export default function Home() {
             </Select>
           </div>
           <div>
-            <InputLabel label="작업명" />
+            <InputLabel label={t("work-permit:작업명")} />
             <TextField name="work_title" onChange={handleChange} />
           </div>
           <TeamSectionSelector
-            teamLabel="작업수행팀"
+            teamLabel={t("work-permit:작업수행팀")}
             teamName="work_team"
             teamValue={values.work_team}
-            sectionLabel="수행 계"
+            sectionLabel={t("work-permit:수행_계")}
             sectionName="work_div"
             sectionValue={values.work_div}
             handleChange={handleChange}
@@ -176,32 +175,32 @@ export default function Home() {
             allTeam
           />
           <TeamSectionSelector
-            teamLabel="공사감독팀"
+            teamLabel={t("work-permit:공사감독팀")}
             teamName="inspection_team"
             teamValue={values.inspection_team}
-            sectionLabel="감독 계"
+            sectionLabel={t("work-permit:감독_계")}
             sectionName="inspection_div"
             sectionValue={values.inspection_div}
             handleChange={handleChange}
             setFieldValue={setFieldValue}
           />
           <TeamSectionSelector
-            teamLabel="작업승인팀"
+            teamLabel={t("work-permit:작업승인팀")}
             teamName="approval_team"
             teamValue={values.approval_team}
-            sectionLabel="승인 Section"
+            sectionLabel={t("work-permit:승인_Section")}
             sectionName="approval_section"
             sectionValue={values.approval_section}
             handleChange={handleChange}
             setFieldValue={setFieldValue}
           />
           <div>
-            <InputLabel label="W/O Number" />
+            <InputLabel label={t("work-permit:W/O_Number")} />
             <TextField name="work_order_number" onChange={handleChange} />
           </div>
 
           <div>
-            <InputLabel label="장치명" />
+            <InputLabel label={t("work-permit:장치명")} />
             <TextField name="work_equipment" onChange={handleChange} />
           </div>
         </div>
@@ -215,7 +214,7 @@ export default function Home() {
                 onChange={handleChange}
               />
             }
-            label="작업 전"
+            label={t("work-permit:작업_전")}
           />
           <FormControlLabel
             control={
@@ -226,7 +225,7 @@ export default function Home() {
                 onChange={handleChange}
               />
             }
-            label="작업 진행 중"
+            label={t("work-permit:작업_진행_중")}
           />
           <FormControlLabel
             control={
@@ -237,7 +236,7 @@ export default function Home() {
                 onChange={handleChange}
               />
             }
-            label="작업 완료/취소"
+            label={t("work-permit:작업_완료/취소")}
           />
         </div>
         <CustomDataGrid

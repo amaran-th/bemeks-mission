@@ -1,17 +1,11 @@
 import { QueryKeys } from "@/data/queryKeys";
 import { client } from "../api/client";
 import { useQuery } from "@tanstack/react-query";
-import {
-  InformationData,
-  WorkPermitRow,
-  WorkPermitRowData,
-} from "@/types/dto/common.dto";
+import { InformationData, WorkPermitRowData } from "@/types/dto/common.dto";
 import {
   mockAllTeams,
   mockTeams,
-  mockWorkPermitData,
   sections,
-  tableColumns,
   workDetailKinds,
   workKinds,
 } from "@/data/workPermit";
