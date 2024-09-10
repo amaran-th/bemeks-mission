@@ -8,7 +8,7 @@ const Layout = ({
   return (
     <div className="bg-background min-h-[100vh]">
       <Header />
-      <div className="pt-10">{children}</div>
+      <div className="pt-[72px]">{children}</div>
     </div>
   );
 };

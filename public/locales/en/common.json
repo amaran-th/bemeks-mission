@@ -3,5 +3,11 @@
   "미완료": "Not Selected",
   "문서_번호": "Document Number",
   "필터_열기": "Open Filter",
-  "필터_닫기": "Close Filter"
+  "필터_닫기": "Close Filter",
+  "전송": "Send",
+  "Push_알림_전송": "Send Push Alarm",
+  "수신인": "Receiver",
+  "제목": "Title",
+  "본문": "Content",
+  "관련_문서_번호": "Related Document Number"
 }
