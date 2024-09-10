@@ -19,7 +19,16 @@ const MuiThemeProvider = ({ children }: React.PropsWithChildren) => {
             "&&& .MuiInputBase-input": {
               padding: "8px 12px",
             },
-            width: "210px",
+          },
+        },
+      },
+      MuiAutocomplete: {
+        styleOverrides: {
+          inputRoot: {
+            padding: 0,
+          },
+          input: {
+            padding: 0,
           },
         },
       },

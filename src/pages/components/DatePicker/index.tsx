@@ -1,7 +1,8 @@
 import { WorkPermitFilterValues } from "@/pages";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { FormikErrors } from "formik";
+import { useTranslation } from "next-i18next";
 
 interface DatePickerProps {
   startDate: string;
@@ -22,9 +23,10 @@ const DatePicker = ({
   endDateName,
   setFieldValue,
 }: DatePickerProps) => {
+  const { t } = useTranslation();
   return (
-    <div>
-      <p className="text-label text-md mb-1">날짜</p>
+    <>
+      <p className="text-label text-md mb-1">{t("work-permit:날짜")}</p>
       <div className="flex items-center">
         <DesktopDatePicker
           defaultValue={dayjs(startDate)}
@@ -33,6 +35,7 @@ const DatePicker = ({
             setFieldValue(startDateName, value?.format("YYYY-MM-DD"))
           }
           maxDate={dayjs(endDate)}
+          className="flex-grow"
         />
         ~
         <DesktopDatePicker
@@ -42,9 +45,10 @@ const DatePicker = ({
             setFieldValue(endDateName, value?.format("YYYY-MM-DD"))
           }
           minDate={dayjs(startDate)}
+          className="flex-grow"
         />
       </div>
-    </div>
+    </>
   );
 };
 

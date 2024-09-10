@@ -6,6 +6,7 @@ import {
 } from "@mui/x-data-grid";
 
 interface CustomFooterProps {
+  totalCount: number;
   pageNumber: number;
   pageSize: number;
   setPageNumber: (value: number) => void;
@@ -13,6 +14,7 @@ interface CustomFooterProps {
 }
 
 const CustomFooter = ({
+  totalCount,
   pageNumber,
   pageSize,
   setPageNumber,
@@ -25,6 +27,7 @@ const CustomFooter = ({
     <GridPagination
       rowsPerPage={pageSize}
       page={pageNumber}
+      count={totalCount}
       onRowsPerPageChange={(e) => setPageSize(parseInt(e.target.value))}
       onPageChange={(_, page) => setPageNumber(page)}
     />
