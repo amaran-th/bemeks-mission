@@ -7,8 +7,6 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
-  MenuItem,
-  Select,
   TextField,
 } from "@mui/material";
 import InputLabel from "@/components/Typography/InputLabel";
