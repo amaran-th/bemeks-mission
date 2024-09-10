@@ -3,6 +3,7 @@
 import PageTitle from "@/components/Typography/PageTitle";
 import DatePicker from "./components/DatePicker";
 import {
+  Autocomplete,
   Button,
   Checkbox,
   FormControlLabel,
@@ -20,20 +21,21 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { useRecoilValue } from "recoil";
 import { currentLanguageState } from "@/store/common";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Information } from "@/types/dto/common.dto";
 
 export class WorkPermitFilterValues {
   actual_start_date: string;
   actual_end_date: string;
-  work_type: number;
-  work_detail_type: number;
+  work_type: Information;
+  work_detail_type: Information;
   work_title: string;
-  work_team: number;
-  work_div: number;
-  inspection_team: number;
-  inspection_div: number;
-  approval_team: number;
-  approval_section: number;
+  work_team: Information;
+  work_div: Information;
+  inspection_team: Information;
+  inspection_div: Information;
+  approval_team: Information;
+  approval_section: Information;
   work_order_number: string;
   work_equipment: string;
   work_before: boolean;
@@ -45,15 +47,15 @@ export class WorkPermitFilterValues {
   constructor(
     actual_start_date: string,
     actual_end_date: string,
-    work_type: number,
-    work_detail_type: number,
+    work_type: Information,
+    work_detail_type: Information,
     work_title: string,
-    work_team: number,
-    work_div: number,
-    inspection_team: number,
-    inspection_div: number,
-    approval_team: number,
-    approval_section: number,
+    work_team: Information,
+    work_div: Information,
+    inspection_team: Information,
+    inspection_div: Information,
+    approval_team: Information,
+    approval_section: Information,
     work_order_number: string,
     work_equipment: string,
     work_before: boolean,
@@ -93,20 +95,27 @@ export default function Home() {
   const language = useRecoilValue(currentLanguageState);
   const { t } = useTranslation();
   const [openFilter, setOpenFilter] = useState<boolean>(false);
+  const [workTypeInputValue, setWorkTypeInputValue] = useState<string>("");
+  const [workDetailTypeInputValue, setWorkDetailTypeInputValue] =
+    useState<string>("");
+  const { current: defaultOption } = useRef<Information>({
+    id: 0,
+    content: t("전체"),
+  });
   const { values, handleChange, setFieldValue } = useFormik({
     onSubmit: () => {},
     initialValues: new WorkPermitFilterValues(
       dayjs(new Date()).format("YYYY-MM-DD"),
       dayjs(new Date()).format("YYYY-MM-DD"),
-      0,
-      0,
+      defaultOption,
+      defaultOption,
       "",
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
+      defaultOption,
+      defaultOption,
+      defaultOption,
+      defaultOption,
+      defaultOption,
+      defaultOption,
       "",
       "",
       true,
@@ -146,33 +155,39 @@ export default function Home() {
             </div>
             <div>
               <InputLabel label={t("work-permit:작업_종류")} />
-              <Select
-                name="work_type"
+              <Autocomplete
+                size="small"
+                options={workTypes?.payload ?? []}
+                inputValue={workTypeInputValue}
                 value={values.work_type}
-                onChange={handleChange}
+                onInputChange={(_, value) => setWorkTypeInputValue(value)}
+                onChange={(_, value, reason) => {
+                  if (reason === "clear")
+                    setFieldValue("work_type", defaultOption);
+                  else setFieldValue("work_type", value);
+                }}
+                getOptionLabel={(option: Information) => option.content}
                 className="w-full lg:w-[210px]"
-              >
-                {workTypes?.payload.map((work) => (
-                  <MenuItem value={work.id} key={work.id}>
-                    {work.content}
-                  </MenuItem>
-                ))}
-              </Select>
+                renderInput={(params) => <TextField {...params} size="small" />}
+              />
             </div>
             <div>
               <InputLabel label={t("work-permit:작업_상세_분류")} />
-              <Select
-                name="work_detail_type"
+              <Autocomplete
+                size="small"
+                options={workDetailTypes?.payload ?? []}
+                inputValue={workDetailTypeInputValue}
                 value={values.work_detail_type}
-                onChange={handleChange}
+                onInputChange={(_, value) => setWorkDetailTypeInputValue(value)}
+                onChange={(_, value, reason) => {
+                  if (reason === "clear")
+                    setFieldValue("work_detail_type", defaultOption);
+                  else setFieldValue("work_detail_type", value);
+                }}
+                getOptionLabel={(option: Information) => option.content}
                 className="w-full lg:w-[210px]"
-              >
-                {workDetailTypes?.payload.map((workDetail) => (
-                  <MenuItem value={workDetail.id} key={workDetail.id}>
-                    {workDetail.content}
-                  </MenuItem>
-                ))}
-              </Select>
+                renderInput={(params) => <TextField {...params} size="small" />}
+              />
             </div>
             <div>
               <InputLabel label={t("work-permit:작업명")} />
@@ -190,7 +205,6 @@ export default function Home() {
               sectionLabel={t("work-permit:수행_계")}
               sectionName="work_div"
               sectionValue={values.work_div}
-              handleChange={handleChange}
               setFieldValue={setFieldValue}
               allTeam
             />
@@ -201,7 +215,6 @@ export default function Home() {
               sectionLabel={t("work-permit:감독_계")}
               sectionName="inspection_div"
               sectionValue={values.inspection_div}
-              handleChange={handleChange}
               setFieldValue={setFieldValue}
             />
             <TeamSectionSelector
@@ -211,7 +224,6 @@ export default function Home() {
               sectionLabel={t("work-permit:승인_Section")}
               sectionName="approval_section"
               sectionValue={values.approval_section}
-              handleChange={handleChange}
               setFieldValue={setFieldValue}
             />
             <div>

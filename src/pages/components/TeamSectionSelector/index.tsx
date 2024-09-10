@@ -1,29 +1,21 @@
 import InputLabel from "@/components/Typography/InputLabel";
-import { QueryKeys } from "@/data/queryKeys";
 import { useAllTeams, useTeams, useTeamSections } from "@/lib/hooks/useApi";
 import { WorkPermitFilterValues } from "@/pages";
 import { currentLanguageState } from "@/store/common";
-import { Information, InformationData } from "@/types/dto/common.dto";
-import { MenuItem, Select } from "@mui/material";
-import { useQueryClient } from "@tanstack/react-query";
+import { Information } from "@/types/dto/common.dto";
+import { Autocomplete, TextField } from "@mui/material";
 import { FormikErrors } from "formik";
 import { useTranslation } from "next-i18next";
-import { ChangeEvent, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 
 interface TeamSectionSelectorProps {
   teamLabel: string;
   teamName: string;
-  teamValue: number;
+  teamValue: Information;
   sectionLabel: string;
   sectionName: string;
-  sectionValue: number;
-  handleChange: {
-    (e: ChangeEvent<any>): void;
-    <T_1 = string | ChangeEvent<any>>(field: T_1): T_1 extends ChangeEvent<any>
-      ? void
-      : (e: string | ChangeEvent<any>) => void;
-  };
+  sectionValue: Information;
   setFieldValue: (
     field: string,
     value: any,
@@ -39,55 +31,64 @@ const TeamSectionSelector = ({
   sectionLabel,
   sectionName,
   sectionValue,
-  handleChange,
   setFieldValue,
   allTeam = false,
 }: TeamSectionSelectorProps) => {
   const language = useRecoilValue(currentLanguageState);
+  const { t } = useTranslation();
   const { data: allTeams } = useAllTeams(language, { enabled: allTeam });
   const { data: teams } = useTeams(language, { enabled: !allTeam });
-  const { data: sections, refetch } = useTeamSections(language, teamValue);
+  const { data: sections, refetch } = useTeamSections(language, teamValue.id);
   const loadedTeam: Information[] = useMemo(
     () => (allTeam ? allTeams : teams)?.payload ?? [],
     [allTeam, allTeams, teams]
   );
+  const [teamInputValue, setTeamInputValue] = useState<string>("");
+  const [sectionInputValue, setSectionInputValue] = useState<string>("");
+  const { current: defaultOption } = useRef<Information>({
+    id: 0,
+    content: t("전체"),
+  });
   useEffect(() => {
-    setFieldValue(sectionName, 0);
+    setFieldValue(sectionName, defaultOption);
     refetch();
-  }, [teamValue, sectionName, setFieldValue, refetch]);
+  }, [teamValue, sectionName, setFieldValue, refetch, defaultOption]);
 
   return (
     <>
       <div>
         <InputLabel label={teamLabel} />
-        <Select
-          name={teamName}
+        <Autocomplete
+          size="small"
+          options={loadedTeam}
+          inputValue={teamInputValue}
           value={teamValue}
-          onChange={handleChange}
+          onInputChange={(_, value) => setTeamInputValue(value)}
+          onChange={(_, value, reason) => {
+            if (reason === "clear") setFieldValue(teamName, defaultOption);
+            else setFieldValue(teamName, value);
+          }}
+          getOptionLabel={(option: Information) => option.content}
           className="w-full lg:w-[210px]"
-        >
-          {Array.isArray(loadedTeam) && // api 연결 후에 지워보기
-            loadedTeam.map((team) => (
-              <MenuItem value={team.id} key={team.id}>
-                {team.content}
-              </MenuItem>
-            ))}
-        </Select>
+          renderInput={(params) => <TextField {...params} size="small" />}
+        />
       </div>
       <div>
         <InputLabel label={sectionLabel} />
-        <Select
-          name={sectionName}
+        <Autocomplete
+          size="small"
+          options={sections?.payload ?? []}
+          inputValue={sectionInputValue}
           value={sectionValue}
-          onChange={handleChange}
+          onInputChange={(_, value) => setSectionInputValue(value)}
+          onChange={(_, value, reason) => {
+            if (reason === "clear") setFieldValue(sectionName, defaultOption);
+            else setFieldValue(sectionName, value);
+          }}
+          getOptionLabel={(option: Information) => option.content}
           className="w-full lg:w-[210px]"
-        >
-          {sections?.payload.map((section) => (
-            <MenuItem value={section.id} key={section.id}>
-              {section.content}
-            </MenuItem>
-          ))}
-        </Select>
+          renderInput={(params) => <TextField {...params} size="small" />}
+        />
       </div>
     </>
   );

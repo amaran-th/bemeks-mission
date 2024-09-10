@@ -22,6 +22,13 @@ const MuiThemeProvider = ({ children }: React.PropsWithChildren) => {
           },
         },
       },
+      MuiAutocomplete: {
+        styleOverrides: {
+          inputRoot: {
+            padding: "0px",
+          },
+        },
+      },
     },
   });
 
